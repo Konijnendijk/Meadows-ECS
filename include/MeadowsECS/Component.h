@@ -31,7 +31,7 @@ namespace Meadows {
          *
          * @param index This component type's index in ComponentSet
          */
-        void setIndex(unsigned int index) {
+        void setIndex(std::size_t index) {
             this->index = index;
         }
     };

@@ -7,7 +7,7 @@
 #include <memory>
 #include <algorithm>
 
-#include "GameObject.h"
+#include "Entity.h"
 
 namespace Meadows {
 
@@ -18,10 +18,10 @@ namespace Meadows {
      * When objects do not depend on each other, consider using GameObject.tick().
      */
     class System {
-        std::vector<GameObject*> objects;
+        std::vector<Entity*> objects;
         //Objects added or removed in the current frame, will be added to or removed from objects before next frame
-        std::queue<GameObject*> toAdd;
-        std::queue<GameObject*> toRemove;
+        std::queue<Entity*> toAdd;
+        std::queue<Entity*> toRemove;
 
     public:
 
@@ -40,9 +40,9 @@ namespace Meadows {
         /**
          * @brief register an object for parsing by this system
          */
-        void registerObject(GameObject* object);
+        void registerObject(Entity* object);
 
-        void removeObject(GameObject* object);
+        void removeObject(Entity* object);
 
         /**
          * @brief Called when the game starts
@@ -58,21 +58,21 @@ namespace Meadows {
          *
          * @return True if the object should be accepted, false if not
          */
-        virtual bool acceptsObject(GameObject *object);
+        virtual bool acceptsObject(Entity *object);
 
         /**
          * @brief Called when an object is added to this system
          *
          * @param object The added object
          */
-        virtual void objectAdded(GameObject* object) = 0;
+        virtual void objectAdded(Entity* object) = 0;
 
         /**
          * @brief Called when an object is removed from the system
          *
          * @param object The removed object
          */
-        virtual void objectRemoved(GameObject* object) = 0;
+        virtual void objectRemoved(Entity* object) = 0;
 
         /**
          * @brief Called each tick after all objects have been processed

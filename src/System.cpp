@@ -10,7 +10,7 @@ void Meadows::System::tick(float delta) {
     while (!toRemove.empty()) {
         auto remove = toRemove.front();
         objects.erase(std::remove_if(objects.begin(), objects.end(),
-                                     [&](GameObject* obj) {
+                                     [&](Entity* obj) {
                                          return obj == remove;
                                      }), objects.end());
         objectRemoved(remove);
@@ -28,14 +28,14 @@ void Meadows::System::tick(float delta) {
     doTick(delta);
 }
 
-void Meadows::System::registerObject(Meadows::GameObject *object) {
+void Meadows::System::registerObject(Meadows::Entity *object) {
     toAdd.push(object);
 }
 
-void Meadows::System::removeObject(Meadows::GameObject *object) {
+void Meadows::System::removeObject(Meadows::Entity *object) {
     toRemove.push(object);
 }
 
-bool Meadows::System::acceptsObject(Meadows::GameObject *object) {
+bool Meadows::System::acceptsObject(Meadows::Entity *object) {
     return true;
 }

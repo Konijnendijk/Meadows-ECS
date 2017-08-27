@@ -6,7 +6,7 @@
 
 namespace Meadows {
 
-    class GameObject {
+    class Entity {
 
         friend class World;
 
@@ -17,11 +17,11 @@ namespace Meadows {
         ComponentSet componentSet;
 
     public:
-        GameObject();
+        Entity();
 
-        GameObject(const GameObject &other);
+        Entity(const Entity &other);
 
-        virtual ~GameObject();
+        virtual ~Entity();
 
         /**
          * @brief Called when the game starts
@@ -102,7 +102,7 @@ namespace Meadows {
          */
         std::size_t getId() const;
 
-        bool operator==(const GameObject& rhs);
+        bool operator==(const Entity& rhs);
 
     private:
 

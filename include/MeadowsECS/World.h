@@ -4,29 +4,23 @@
 
 
 #include <vector>
-#include <map>
 #include <memory>
 #include <string>
 
-#include "GameObject.h"
+#include "Entity.h"
 #include "System.h"
 
 
 namespace Meadows {
-
-    class SystemAlreadyRegisteredException : std::runtime_error {
-    public:
-        SystemAlreadyRegisteredException(const std::string what);
-    };
-
     class World {
 
         static World *instance;
 
-        std::vector<GameObject*> objects;
-        std::vector<GameObject*> objectsToAdd;
-        std::vector<GameObject*> objectsToRemove;
-        std::map<std::string, System*> systems;
+        std::vector<Entity*> objects;
+        std::vector<Entity*> objectsToAdd;
+        std::vector<Entity*> objectsToRemove;
+
+        std::vector<System*> systems;
 
         // Counter for assigning ids to GameObjects
         std::size_t nextGameObjectId;
@@ -40,25 +34,29 @@ namespace Meadows {
         /**
          * @brief create an object of the given type using the constructor taking varArgs
          *
-         * @return A pointer to the newly created component, owned by this World
+         * @return A pointer to the newly created entity, owned by this World
          */
         template<class T, class... VarArgs>
-        T* createObjectOfType(VarArgs... varArgs) {
+        T* createEntity(VarArgs... varArgs) {
             T* object = new T(varArgs...);
             registerObject(object);
             return object;
         }
 
         /**
-         * @brief register an already created system to this world
+         * @brief create a system of the given type using the constructor taking varArgs
          *
          * The system's System.registerObject(), System.removeObject() and System.tick() methods
-         * will start to be called.
+         * will start to be called the next time world.tick() is called.
          *
-         * @param name A unique name for the system
-         * @param system The System to register, transfers ownership to this World
+         * @return A pointer to the newly created system, owned by this World
          */
-        void registerSystem(std::string name, System* system);
+         template <class T, class... VarArgs>
+        T* createSystem(VarArgs... varArgs) {
+            T* system = new T(varArgs...);
+            registerSystem(system);
+            return system;
+        };
 
         /**
          * @brief Remove a game object from the world.
@@ -68,16 +66,24 @@ namespace Meadows {
          *
          * @param object The object to remove
          */
-        void removeObject(GameObject* object);
+        void removeObject(Entity* object);
 
         /**
-         * @brief Retrieve a system given its name
+         * @brief Retrieve a system given its type
          *
-         * Note that this method will return nullptr when T does not match the type of the System.
+         * This can be a time-consuming operation since it will loop through all systems until the first system of the
+         * given type is found.
+         *
+         * @return The first registered system of the given type, or nullptr if no such system is present
          */
         template<class T>
         T* getSystem(std::string name) {
-            return dynamic_cast<T*>(systems[name]);
+            for (System* s : systems) {
+                T* result = dynamic_cast<T*>(s);
+                if (result != nullptr) {
+                    return result;
+                }
+            }
         }
 
         /**
@@ -88,7 +94,9 @@ namespace Meadows {
         void tick(float delta);
 
     private:
-        void registerObject(GameObject* object);
+        void registerObject(Entity* object);
+
+        void registerSystem(System* system);
     };
 }
 

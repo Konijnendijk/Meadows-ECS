@@ -1,8 +1,8 @@
 
 cmake_minimum_required(VERSION 3.1)
 
-set(SOURCE_FILES src/GameObject.cpp src/World.cpp src/ComponentRegistry.cpp src/System.cpp src/BitSet.cpp)
-set(HEADER_FILES include/MeadowsECS/GameObject.h include/MeadowsECS/System.h include/MeadowsECS/World.h
+set(SOURCE_FILES src/Entity.cpp src/World.cpp src/ComponentRegistry.cpp src/System.cpp src/BitSet.cpp)
+set(HEADER_FILES include/MeadowsECS/Entity.h include/MeadowsECS/System.h include/MeadowsECS/World.h
         include/MeadowsECS/Component.h include/MeadowsECS/ComponentSet.h include/MeadowsECS/ComponentRegistry.h
         include/MeadowsECS/BitSet.h)
 
