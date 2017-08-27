@@ -1,0 +1,51 @@
+version: 2
+
+jobs:
+    build:
+        docker:
+            - image: rikorose/gcc-cmake
+
+        working_directory: ~/MeadowsECS
+
+        steps:
+            - checkout
+            - run:
+                command: |
+                    mkdir ~/build
+                    cd ~/build
+                    cmake -G"Unix Makefiles" -DBUILD_SHARED_LIBS=OFF ~/MeadowsECS
+            - run:
+                command: |
+                    cd ~/build
+                    make -j2
+            - save_cache:
+                    key: MeadowsECS-{{ .Branch }}-{{ checksum "~/build/MeadowsECS.a" }}
+                    paths:
+                        - ~/build
+
+    test:
+        docker:
+            - image: konijnendijk/meadows-build
+
+        working_directory: ~/meadows
+
+        steps:
+            - checkout
+            - restore_cache:
+                keys:
+                    - MeadowsECS-{{ .Branch }}-
+                    - MeadowsECS-
+            - run:
+                command: |
+                    cd ~/build
+                    # Run tests
+
+workflows:
+    version: 2
+
+    build_with_dependencies:
+        jobs:
+            - build
+            - test:
+                requires:
+                    - build
