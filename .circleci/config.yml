@@ -18,23 +18,22 @@ jobs:
                 command: |
                     cd ~/build
                     make -j2
-            - save_cache:
-                    key: MeadowsECS-{{ .Branch }}-{{ checksum "~/build/MeadowsECS.a" }}
-                    paths:
-                        - ~/build
+            - persist_to_workspace:
+                root: ~/
+                paths:
+                    - build/*
 
     test:
         docker:
-            - image: konijnendijk/meadows-build
+            - image: rikorose/gcc-cmake
 
         working_directory: ~/meadows
 
         steps:
             - checkout
-            - restore_cache:
-                keys:
-                    - MeadowsECS-{{ .Branch }}-
-                    - MeadowsECS-
+            - attach_workspace:
+                at:
+                    - ~/
             - run:
                 command: |
                     cd ~/build
