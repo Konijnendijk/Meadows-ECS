@@ -32,8 +32,7 @@ jobs:
         steps:
             - checkout
             - attach_workspace:
-                at:
-                    - ~/
+                at: ~/
             - run:
                 command: |
                     cd ~/build
