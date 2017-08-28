@@ -18,14 +18,6 @@ namespace Meadows {
         static ComponentRegistry* instance;
 
     public:
-        template <class T, class... VarArgs>
-        T* create(VarArgs... varArgs) {
-            T* component = new T(varArgs...);
-            std::size_t index = componentIndex<T>;
-            component->setIndex(index);
-            return component;
-        }
-
         static std::size_t getNumRegisteredComponents();
 
         static ComponentRegistry* getInstance();

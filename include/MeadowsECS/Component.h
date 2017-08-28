@@ -12,28 +12,8 @@ namespace Meadows {
      */
     class Component {
 
-        friend class ComponentRegistry;
-
-        std::size_t index;
-
     public:
         virtual ~Component() {}
-
-        std::size_t getIndex() {
-            return index;
-        }
-
-    private:
-        /**
-         * Called by RegisteredComponent.
-         *
-         * This index should be unique for each component type.
-         *
-         * @param index This component type's index in ComponentSet
-         */
-        void setIndex(std::size_t index) {
-            this->index = index;
-        }
     };
 }
 

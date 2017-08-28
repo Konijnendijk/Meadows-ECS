@@ -6,13 +6,13 @@ using namespace Meadows;
 World::World() : nextGameObjectId(0) {}
 
 World::~World() {
-    for (Entity* object : objects) {
+    for (Entity* object : entities) {
         delete(object);
     }
-    for (Entity* object : objectsToAdd) {
+    for (Entity* object : entitiesToAdd) {
         delete(object);
     }
-    for (Entity* object : objectsToRemove) {
+    for (Entity* object : entitiesToRemove) {
         delete(object);
     }
     for (System* s : systems) {
@@ -22,34 +22,34 @@ World::~World() {
 
 void World::tick(float delta) {
     // Add new objects and initialize them
-    for (Entity* add : objectsToAdd) {
-        objects.push_back(add);
+    for (Entity* add : entitiesToAdd) {
+        entities.push_back(add);
         add->init();
 
         for (auto s : systems) {
             if (s->acceptsObject(add)) {
-                s->registerObject(add);
+                s->registerEntity(add);
             }
         }
     }
-    objectsToAdd.clear();
+    entitiesToAdd.clear();
 
-    for (Entity* remove : objectsToRemove) {
+    for (Entity* remove : entitiesToRemove) {
         for (auto s : systems) {
-            s->removeObject(remove);
+            s->removeEntity(remove);
         }
 
-        objects.erase(std::remove_if(objects.begin(), objects.end(), [remove](Entity* object){return *object == *remove;}));
+        entities.erase(std::remove_if(entities.begin(), entities.end(), [remove](Entity* object){return *object == *remove;}));
 
         delete(remove);
     }
-    objectsToRemove.clear();
+    entitiesToRemove.clear();
 
     for (System* s : systems) {
         s->tick(delta);
     }
 
-    for (Entity* object : objects) {
+    for (Entity* object : entities) {
         if (object->isEnabled())
             object->tick(delta);
     }
@@ -59,13 +59,11 @@ void World::registerSystem(System *system) {
     systems.push_back(system);
 }
 
-
-
-void World::removeObject(Entity *object) {
-    objectsToRemove.push_back(object);
+void World::removeEntity(Entity *object) {
+    entitiesToRemove.push_back(object);
 }
 
-void World::registerObject(Entity *object) {
+void World::registerEntity(Entity *object) {
     object->setId(nextGameObjectId++);
-    objectsToAdd.push_back(object);
+    entitiesToAdd.push_back(object);
 }

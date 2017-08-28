@@ -4,8 +4,6 @@
 
 
 #include <vector>
-#include <memory>
-#include <string>
 
 #include "Entity.h"
 #include "System.h"
@@ -13,12 +11,9 @@
 
 namespace Meadows {
     class World {
-
-        static World *instance;
-
-        std::vector<Entity*> objects;
-        std::vector<Entity*> objectsToAdd;
-        std::vector<Entity*> objectsToRemove;
+        std::vector<Entity*> entities;
+        std::vector<Entity*> entitiesToAdd;
+        std::vector<Entity*> entitiesToRemove;
 
         std::vector<System*> systems;
 
@@ -39,7 +34,7 @@ namespace Meadows {
         template<class T, class... VarArgs>
         T* createEntity(VarArgs... varArgs) {
             T* object = new T(varArgs...);
-            registerObject(object);
+            registerEntity(object);
             return object;
         }
 
@@ -66,7 +61,7 @@ namespace Meadows {
          *
          * @param object The object to remove
          */
-        void removeObject(Entity* object);
+        void removeEntity(Entity *object);
 
         /**
          * @brief Retrieve a system given its type
@@ -77,7 +72,7 @@ namespace Meadows {
          * @return The first registered system of the given type, or nullptr if no such system is present
          */
         template<class T>
-        T* getSystem(std::string name) {
+        T* getSystem() {
             for (System* s : systems) {
                 T* result = dynamic_cast<T*>(s);
                 if (result != nullptr) {
@@ -94,11 +89,10 @@ namespace Meadows {
         void tick(float delta);
 
     private:
-        void registerObject(Entity* object);
+        void registerEntity(Entity *object);
 
         void registerSystem(System* system);
     };
 }
-
 
 #endif //MEADOWSGAMEOSG_WORLD_H

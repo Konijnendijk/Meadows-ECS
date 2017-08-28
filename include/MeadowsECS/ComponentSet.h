@@ -3,8 +3,7 @@
 #define MEADOWSECS_COMPONENTSET_H
 
 #include <vector>
-#include <memory>
-#include <cstdint>
+#include <cstddef>
 
 #include "BitSet.h"
 #include "Component.h"
@@ -20,18 +19,14 @@ namespace Meadows {
         std::vector<Component*> components;
 
     public:
-        ComponentSet() : componentBitSet(ComponentRegistry::getNumRegisteredComponents()) {}
+        ComponentSet();
 
-        ~ComponentSet() {
-            for (Component* component : components) {
-                delete(component);
-            }
-        }
+        ~ComponentSet();
 
         template <class T, class... VarArgs>
         void addComponent(VarArgs... varArgs) {
-            Component* component = ComponentRegistry::getInstance()->create<T>(varArgs...);
-            std::size_t index = component->getIndex();
+            Component* component = new T(varArgs...);
+            std::size_t index = getComponentIndex<T>();
             componentBitSet.set(index);
             std::size_t vectorIndex = componentBitSet.numSetBitsBefore(index);
             components.insert(components.begin() + vectorIndex, component);

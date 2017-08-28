@@ -1,41 +1,36 @@
 
 #include "System.h"
 
-Meadows::System::System(std::string name) {
+using namespace Meadows;
 
-}
+void System::tick(float delta) {
+    for (Entity* add : toAdd) {
+        entities.push_back(add);
+        entityAdded(add);
+    }
+    toAdd.clear();
 
-void Meadows::System::tick(float delta) {
     // Remove objects set to be removed
-    while (!toRemove.empty()) {
-        auto remove = toRemove.front();
-        objects.erase(std::remove_if(objects.begin(), objects.end(),
+    for (Entity* remove : toRemove) {
+        entities.erase(std::remove_if(entities.begin(), entities.end(),
                                      [&](Entity* obj) {
                                          return obj == remove;
-                                     }), objects.end());
-        objectRemoved(remove);
-        toRemove.pop();
+                                     }), entities.end());
+        entityRemoved(remove);
     }
-
-    // Add new objects
-    while (!toAdd.empty()) {
-        auto add = toAdd.front();
-        objects.push_back(add);
-        objectAdded(add);
-        toAdd.pop();
-    }
+    toRemove.clear();
 
     doTick(delta);
 }
 
-void Meadows::System::registerObject(Meadows::Entity *object) {
-    toAdd.push(object);
+void System::registerEntity(Meadows::Entity *object) {
+    toAdd.push_back(object);
 }
 
-void Meadows::System::removeObject(Meadows::Entity *object) {
-    toRemove.push(object);
+void System::removeEntity(Meadows::Entity *object) {
+    toRemove.push_back(object);
 }
 
-bool Meadows::System::acceptsObject(Meadows::Entity *object) {
+bool System::acceptsObject(Meadows::Entity *object) {
     return true;
 }

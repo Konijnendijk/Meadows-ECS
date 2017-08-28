@@ -3,8 +3,6 @@
 #define MEADOWSGAMEOSG_SYSTEM_H
 
 #include <vector>
-#include <queue>
-#include <memory>
 #include <algorithm>
 
 #include "Entity.h"
@@ -18,20 +16,12 @@ namespace Meadows {
      * When objects do not depend on each other, consider using GameObject.tick().
      */
     class System {
-        std::vector<Entity*> objects;
+        std::vector<Entity*> entities;
         //Objects added or removed in the current frame, will be added to or removed from objects before next frame
-        std::queue<Entity*> toAdd;
-        std::queue<Entity*> toRemove;
+        std::vector<Entity*> toAdd;
+        std::vector<Entity*> toRemove;
 
     public:
-
-        /**
-         * @brief Construct a new system
-         *
-         * @param name A name describing this system
-         */
-        System(std::string name);
-
         /**
          * @brief Tick this system
          */
@@ -40,9 +30,9 @@ namespace Meadows {
         /**
          * @brief register an object for parsing by this system
          */
-        void registerObject(Entity* object);
+        void registerEntity(Entity *object);
 
-        void removeObject(Entity* object);
+        void removeEntity(Entity *object);
 
         /**
          * @brief Called when the game starts
@@ -65,14 +55,14 @@ namespace Meadows {
          *
          * @param object The added object
          */
-        virtual void objectAdded(Entity* object) = 0;
+        virtual void entityAdded(Entity *object) = 0;
 
         /**
          * @brief Called when an object is removed from the system
          *
          * @param object The removed object
          */
-        virtual void objectRemoved(Entity* object) = 0;
+        virtual void entityRemoved(Entity *object) = 0;
 
         /**
          * @brief Called each tick after all objects have been processed

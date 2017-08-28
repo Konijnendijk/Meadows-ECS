@@ -5,16 +5,18 @@
 #include <cstring>
 #include <new>
 
-Meadows::BitSet::BitSet() : numBits(0), bits{} {}
+using namespace Meadows;
 
-Meadows::BitSet::BitSet(std::size_t numBits) : numBits(numBits) {
+BitSet::BitSet() : numBits(0), bits{} {}
+
+BitSet::BitSet(std::size_t numBits) : numBits(numBits) {
     bits = (uint32_t*) std::malloc(getMemoryRequirement());
     if (bits == nullptr) {
         throw std::bad_alloc();
     }
 }
 
-Meadows::BitSet &Meadows::BitSet::operator=(Meadows::BitSet& other) {
+BitSet &Meadows::BitSet::operator=(Meadows::BitSet& other) {
     numBits = other.numBits;
     size_t size = getMemoryRequirement();
     bits = (uint32_t*) std::realloc(bits, size);
@@ -25,19 +27,19 @@ Meadows::BitSet &Meadows::BitSet::operator=(Meadows::BitSet& other) {
     return *this;
 }
 
-uint32_t Meadows::BitSet::operator[](std::size_t n) {
+uint32_t BitSet::operator[](std::size_t n) {
     return get(n);
 }
 
-void Meadows::BitSet::set(std::size_t n) {
+void BitSet::set(std::size_t n) {
     bits[n / 32] |= (1 << (n % 32));
 }
 
-uint32_t Meadows::BitSet::get(std::size_t n) {
+uint32_t BitSet::get(std::size_t n) {
     return bits[n / 32] & (1 << (n % 32));
 }
 
-std::size_t Meadows::BitSet::numSetBitsBefore(std::size_t n) {
+std::size_t BitSet::numSetBitsBefore(std::size_t n) {
     std::size_t num = 0;
     // Count the bits in the uint32_t values before the (n/32)th value
     for (std::size_t i = 0; i<n/32; i++) {
@@ -56,10 +58,10 @@ std::size_t Meadows::BitSet::numSetBitsBefore(std::size_t n) {
     return num;
 }
 
-Meadows::BitSet::~BitSet() {
+BitSet::~BitSet() {
     std::free(bits);
 }
 
-std::size_t Meadows::BitSet::getMemoryRequirement() {
+std::size_t BitSet::getMemoryRequirement() {
     return (numBits % 32 + numBits) / sizeof(uint32_t);
 }
