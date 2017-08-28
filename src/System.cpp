@@ -23,14 +23,14 @@ void System::tick(float delta) {
     doTick(delta);
 }
 
-void System::registerEntity(Meadows::Entity *object) {
+void System::registerEntity(Entity *object) {
     toAdd.push_back(object);
 }
 
-void System::removeEntity(Meadows::Entity *object) {
+void System::removeEntity(Entity *object) {
     toRemove.push_back(object);
 }
 
-bool System::acceptsObject(Meadows::Entity *object) {
+bool System::acceptsObject(Entity *object) {
     return true;
 }

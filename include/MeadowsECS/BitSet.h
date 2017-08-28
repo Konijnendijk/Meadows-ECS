@@ -42,14 +42,6 @@ namespace Meadows {
         void set (std::size_t n);
 
         /**
-         * Get the bit at index n.
-         *
-         * @param n Bit index
-         * @return 0 If not set, not 0 if set
-         */
-        uint32_t get (std::size_t n);
-
-        /**
          * Count the number of set bits before n.
          *
          * @param n Bit index

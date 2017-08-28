@@ -41,7 +41,7 @@ namespace Meadows {
         template <class T>
         T* getComponent() {
             std::size_t index = getComponentIndex<T>();
-            if (!componentBitSet.get(index)) {
+            if (!componentBitSet[index]) {
                 return nullptr;
             }
             return static_cast<T*>(components[componentBitSet.numSetBitsBefore(index)]);
@@ -56,7 +56,7 @@ namespace Meadows {
         template <class T>
         bool hasComponent() {
             std::size_t index = getComponentIndex<T>();
-            return componentBitSet.get(index) != 0;
+            return componentBitSet[index] != 0;
         }
 
     private:

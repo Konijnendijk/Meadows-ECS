@@ -16,7 +16,7 @@ BitSet::BitSet(std::size_t numBits) : numBits(numBits) {
     }
 }
 
-BitSet &Meadows::BitSet::operator=(Meadows::BitSet& other) {
+BitSet &BitSet::operator=(BitSet& other) {
     numBits = other.numBits;
     size_t size = getMemoryRequirement();
     bits = (uint32_t*) std::realloc(bits, size);
@@ -28,15 +28,11 @@ BitSet &Meadows::BitSet::operator=(Meadows::BitSet& other) {
 }
 
 uint32_t BitSet::operator[](std::size_t n) {
-    return get(n);
+    return bits[n / 32] & (1 << (n % 32));
 }
 
 void BitSet::set(std::size_t n) {
     bits[n / 32] |= (1 << (n % 32));
-}
-
-uint32_t BitSet::get(std::size_t n) {
-    return bits[n / 32] & (1 << (n % 32));
 }
 
 std::size_t BitSet::numSetBitsBefore(std::size_t n) {
