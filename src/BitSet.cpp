@@ -10,7 +10,9 @@ using namespace Meadows;
 BitSet::BitSet() : numBits(0), bits{} {}
 
 BitSet::BitSet(std::size_t numBits) : numBits(numBits) {
-    bits = (uint32_t*) std::malloc(getMemoryRequirement());
+    size_t memoryRequirement = getMemoryRequirement();
+    bits = (uint32_t*) std::malloc(memoryRequirement);
+    std::memset(bits, 0, memoryRequirement);
     if (bits == nullptr) {
         throw std::bad_alloc();
     }
@@ -43,7 +45,7 @@ std::size_t BitSet::numSetBitsBefore(std::size_t n) {
         uint32_t count = bits[i];
         count = count - ((count >> 1) & 0x55555555);
         count = (count & 0x33333333) + ((count >> 2) & 0x33333333);
-        return (((count + (count >> 4)) & 0x0F0F0F0F) * 0x01010101) >> 24;
+        num += (((count + (count >> 4)) & 0x0F0F0F0F) * 0x01010101) >> 24;
     }
 
     // Count the bits of the (n/32)th value, up to the nth bit
