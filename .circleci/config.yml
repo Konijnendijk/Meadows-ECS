@@ -35,8 +35,12 @@ jobs:
                 at: ~/
             - run:
                 command: |
+                    mkdir ~/test-results
                     cd ~/build
-                    make -j2 test
+                    make -j2 MeadowsECSTest
+                    ./MeadowsECSTest -r junit > ~/test-results/MeadowsECSTest.xml
+            - store_test_results:
+                path: ~/test-results
 
 workflows:
     version: 2
