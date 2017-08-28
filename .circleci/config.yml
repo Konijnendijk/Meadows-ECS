@@ -27,7 +27,7 @@ jobs:
         docker:
             - image: rikorose/gcc-cmake
 
-        working_directory: ~/meadows
+        working_directory: ~/MeadowsECS
 
         steps:
             - checkout
