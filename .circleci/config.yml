@@ -35,10 +35,10 @@ jobs:
                 at: ~/
             - run:
                 command: |
-                    mkdir ~/test-results
+                    mkdir -p ~/test-results/unit_tests
                     cd ~/build
                     make -j2 MeadowsECSTest
-                    ./test/MeadowsECSTest -r junit > ~/test-results/MeadowsECSTest.xml
+                    ./test/MeadowsECSTest -r junit > ~/test-results/unit_tests/MeadowsECSTest.xml
             - store_test_results:
                 path: ~/test-results
 
