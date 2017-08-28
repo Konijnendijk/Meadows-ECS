@@ -38,7 +38,7 @@ jobs:
                     mkdir ~/test-results
                     cd ~/build
                     make -j2 MeadowsECSTest
-                    ./MeadowsECSTest -r junit > ~/test-results/MeadowsECSTest.xml
+                    ./test/MeadowsECSTest -r junit > ~/test-results/MeadowsECSTest.xml
             - store_test_results:
                 path: ~/test-results
 
