@@ -28,7 +28,7 @@ jobs:
                     tar -zcf MeadowsECS-${CIRCLE_BRANCH}-${CIRCLE_BUILD_NUM}.tar.gz ~/release/*
             - run:
                 command: |
-                    mkdir ~/test-results/junit
+                    mkdir -p ~/test-results/junit
                     cd ~/build
                     make -j2 MeadowsECSTest
                     ./test/MeadowsECSTest -r junit > ~/test-results/junit/MeadowsECSTests.xml
