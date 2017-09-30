@@ -23,15 +23,16 @@ jobs:
                     cp libMeadowsECS.so ~/release/lib
             - run:
                 command: |
+                    mkdir ~/release
+                    cd ~/release
                     tar -zcf MeadowsECS-${CIRCLE_BRANCH}-${CIRCLE_BUILD_NUM}.tar.gz ~/release/*
             - run:
                 command: |
-                    mkdir ~/test-results
+                    mkdir ~/test-results/junit
                     cd ~/build
                     make -j2 MeadowsECSTest
-                    ./test/MeadowsECSTest -r junit > ~/test-results/junit.xml
+                    ./test/MeadowsECSTest -r junit > ~/test-results/junit/MeadowsECSTests.xml
             - store_test_results:
                 path: ~/test-results
             - store_artifacts:
-                path: ~/build/libMeadowsECS.so
-                destination: lib
+                path: ~/release
