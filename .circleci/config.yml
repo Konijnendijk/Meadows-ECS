@@ -12,32 +12,26 @@ jobs:
             - run:
                 command: |
                     mkdir ~/build
+                    mkdir -p ~/release/lib
+                    cp -R include ~/release
                     cd ~/build
-                    cmake -G"Unix Makefiles" -DBUILD_SHARED_LIBS=OFF -DBUILD_TEST=ON ~/MeadowsECS
+                    cmake -G"Unix Makefiles" -DBUILD_SHARED_LIBS=ON -DBUILD_TEST=ON ~/MeadowsECS
             - run:
                 command: |
                     cd ~/build
                     make -j2 MeadowsECS
-            - persist_to_workspace:
-                root: ~/
-                paths:
-                    - build/*
-
-    test:
-        docker:
-            - image: rikorose/gcc-cmake
-
-        working_directory: ~/MeadowsECS
-
-        steps:
-            - checkout
-            - attach_workspace:
-                at: ~/
+                    cp libMeadowsECS.so ~/release/lib
             - run:
                 command: |
-                    mkdir -p ~/test-results/unit_tests
+                    tar -zcf MeadowsECS-${CIRCLE_BRANCH}-${CIRCLE_BUILD_NUM}.tar.gz ~/release/*
+            - run:
+                command: |
+                    mkdir ~/test-results
                     cd ~/build
                     make -j2 MeadowsECSTest
-                    ./test/MeadowsECSTest -r junit > ~/test-results/unit_tests/MeadowsECSTest.xml
+                    ./test/MeadowsECSTest -r junit > ~/test-results/junit.xml
             - store_test_results:
                 path: ~/test-results
+            - store_artifacts:
+                path: ~/build/libMeadowsECS.so
+                destination: lib
