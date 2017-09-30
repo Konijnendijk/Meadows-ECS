@@ -13,7 +13,8 @@ jobs:
                 command: |
                     mkdir ~/build
                     mkdir -p ~/release/lib
-                    cp -R include ~/release
+                    mkdir -p ~/release/include
+                    cp include/MeadowsECS/* ~/release/include
                     cd ~/build
                     cmake -G"Unix Makefiles" -DBUILD_SHARED_LIBS=ON -DBUILD_TEST=ON ~/MeadowsECS
             - run:
@@ -24,8 +25,8 @@ jobs:
             - run:
                 command: |
                     mkdir ~/artifacts
-                    cd ~/artifacts
-                    tar -zcf MeadowsECS-${CIRCLE_BRANCH}-${CIRCLE_BUILD_NUM}.tar.gz ~/release/*
+                    cd ~/release
+                    tar -zcf ~/artifacts/MeadowsECS-${CIRCLE_BRANCH}-${CIRCLE_BUILD_NUM}.tar.gz ./*
             - run:
                 command: |
                     mkdir -p ~/test-results/junit
