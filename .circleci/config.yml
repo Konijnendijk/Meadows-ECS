@@ -23,8 +23,8 @@ jobs:
                     cp libMeadowsECS.so ~/release/lib
             - run:
                 command: |
-                    mkdir ~/release
-                    cd ~/release
+                    mkdir ~/artifacts
+                    cd ~/artifacts
                     tar -zcf MeadowsECS-${CIRCLE_BRANCH}-${CIRCLE_BUILD_NUM}.tar.gz ~/release/*
             - run:
                 command: |
@@ -35,4 +35,4 @@ jobs:
             - store_test_results:
                 path: ~/test-results
             - store_artifacts:
-                path: ~/release
+                path: ~/artifacts
