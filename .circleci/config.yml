@@ -26,14 +26,16 @@ jobs:
                 command: |
                     mkdir ~/artifacts
                     cd ~/release
-                    tar -zcf ~/artifacts/MeadowsECS-${CIRCLE_BRANCH}-${CIRCLE_BUILD_NUM}.tar.gz ./*
+                    tar -zcf ~/artifacts/MeadowsECS-${CIRCLE_BRANCH}-${CIRCLE_BUILD_NUM}.tar.gz *
             - run:
                 command: |
                     mkdir -p ~/test-results/junit
                     cd ~/build
                     make -j2 MeadowsECSTest
                     ./test/MeadowsECSTest -r junit > ~/test-results/junit/MeadowsECSTests.xml
-            - store_test_results:
-                path: ~/test-results
             - store_artifacts:
                 path: ~/artifacts
+            - store_artifacts:
+                path: ~/test-results
+            - store_test_results:
+                path: ~/test-results
