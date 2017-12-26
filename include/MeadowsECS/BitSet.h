@@ -25,7 +25,7 @@ namespace Meadows {
          */
         BitSet (std::size_t numBits);
 
-        BitSet& operator=(BitSet& other);
+        BitSet& operator=(const BitSet& other);
 
         /**
          * Get the bit at index n
@@ -54,6 +54,13 @@ namespace Meadows {
     private:
         std::size_t getMemoryRequirement();
 
+        /**
+         * Count the number of set bits in a 32 bit int.
+         *
+         * @param num The uint32_t to count the set bits of
+         * @return The number of bits set
+         */
+        uint32_t popCount(uint32_t num) const;
     };
 
 }

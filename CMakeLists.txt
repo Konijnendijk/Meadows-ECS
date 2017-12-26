@@ -1,9 +1,18 @@
 
 cmake_minimum_required(VERSION 3.1)
 
+include(CheckCXXSourceCompiles)
+include(CheckTypeSize)
+
 project(MeadowsECS)
 
 option(BUILD_TEST "Build the MeadowsECS unit tests" OFF)
+option(USE_POPCOUNT_INTRINSIC "Use a compiler popcount intrinsic when available" ON)
+
+# Check if a builtin popcount implementation exists and can be used
+check_cxx_source_compiles("int main(){__builtin_popcount(0);}" GCC_POPCOUNT_EXISTS)
+check_cxx_source_compiles("int main(){__popcnt(0);}" MSVC_POPCOUNT_EXISTS)
+check_type_size("unsigned int" SIZEOF_UNSIGNED_INT)
 
 set(SOURCE_FILES src/Entity.cpp src/World.cpp src/ComponentRegistry.cpp src/System.cpp src/BitSet.cpp src/ComponentSet.cpp)
 set(HEADER_FILES include/MeadowsECS/Entity.h include/MeadowsECS/System.h include/MeadowsECS/World.h
@@ -17,6 +26,15 @@ set_property(TARGET MeadowsECS PROPERTY CXX_STANDARD 14)
 target_include_directories(MeadowsECS PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/MeadowsECS>
         $<INSTALL_INTERFACE:include/MeadowsECS>)
+
+# intrinsic popcounts can only be used with `unsigned int`, since internally `uint32_t` is used, these need to match
+if (USE_POPCOUNT_INTRINSIC AND SIZEOF_UNSIGNED_INT EQUAL 4)
+    if (GCC_POPCOUNT_EXISTS)
+        target_compile_definitions(MeadowsECS PRIVATE USE_GCC_POPCOUNT)
+    elseif(MSVC_POPCOUNT_EXISTS)
+        target_compile_definitions(MeadowsECS PRIVATE USE_MSVC_POPCOUNT)
+    endif()
+endif()
 
 if (BUILD_TEST)
     add_subdirectory(test)
