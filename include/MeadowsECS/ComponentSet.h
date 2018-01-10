@@ -7,6 +7,7 @@
 
 #include "BitSet.h"
 #include "Component.h"
+#include "ComponentRegistry.h"
 
 namespace Meadows {
 

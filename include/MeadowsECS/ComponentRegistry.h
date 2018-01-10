@@ -3,10 +3,13 @@
 #define MEADOWSECS_COMPONENTREGISTRY_H
 
 #include <cstddef>
+#include <type_traits>
+
+#include "Component.h"
 
 namespace Meadows {
     /**
-     * Uses a templated variable to keep track of the existing component types in the form of a RegisteredComponent.
+     * Uses a templated variable to keep track of the existing component types.
      */
     class ComponentRegistry {
 
@@ -24,6 +27,7 @@ namespace Meadows {
 
         template <class T>
         std::size_t getComponentIndex() {
+            static_assert(std::is_base_of<Component, T>::value, "T must be of type Component");
             return componentIndex<T>;
         }
     };
