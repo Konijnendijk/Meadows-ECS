@@ -5,6 +5,10 @@
 #include <cstring>
 #include <new>
 
+#ifdef USE_MSVC_POPCOUNT
+#include <intrin.h>
+#endif
+
 using namespace Meadows;
 
 BitSet::BitSet() : numBits(0), bits{} {}
@@ -45,9 +49,10 @@ std::size_t BitSet::numSetBitsBefore(std::size_t n) {
 #ifdef USE_GCC_POPCOUNT
         count += __builtin_popcount(num);
 #elif USE_MSVC_POPCOUNT
+        // If the popcnt instruction is not supported by the hardware, this will fail
         count += __popcnt(num);
 #else
-        count += popCount(num);
+       count += popCount(num);
 #endif
     }
 

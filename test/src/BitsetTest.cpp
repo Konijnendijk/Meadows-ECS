@@ -6,6 +6,7 @@
 #include <random>
 #include <vector>
 #include <csignal>
+#include <functional>
 
 using namespace Meadows;
 
@@ -93,7 +94,7 @@ TEST_CASE("BitSet fuzzing", "[BitSet]") {
         }
 
         // Test that the count of bits before an index is correct
-        std::sort(setIndices.begin(), setIndices.end(), std::greater<std::size_t>());
+        std::sort(setIndices.begin(), setIndices.end(), std::greater<>());
         std::size_t count = 0;
 
         for (int j=0; j<=size; j++) {

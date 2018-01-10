@@ -10,8 +10,10 @@ option(BUILD_TEST "Build the MeadowsECS unit tests" OFF)
 option(USE_POPCOUNT_INTRINSIC "Use a compiler popcount intrinsic when available" ON)
 
 # Check if a builtin popcount implementation exists and can be used
-check_cxx_source_compiles("int main(){__builtin_popcount(0);}" GCC_POPCOUNT_EXISTS)
-check_cxx_source_compiles("int main(){__popcnt(0);}" MSVC_POPCOUNT_EXISTS)
+file(READ cmake/test_gcc_popcount.cpp GCC_POPCOUNT_SOURCE)
+file(READ cmake/test_msvc_popcount.cpp MSVC_POPCOUNT_SOURCE)
+check_cxx_source_compiles("${GCC_POPCOUNT_SOURCE}" GCC_POPCOUNT_EXISTS)
+check_cxx_source_compiles("${MSVC_POPCOUNT_SOURCE}" MSVC_POPCOUNT_EXISTS)
 check_type_size("unsigned int" SIZEOF_UNSIGNED_INT)
 
 set(SOURCE_FILES src/Entity.cpp src/World.cpp src/ComponentRegistry.cpp src/System.cpp src/BitSet.cpp src/ComponentSet.cpp)
@@ -32,6 +34,7 @@ if (USE_POPCOUNT_INTRINSIC AND SIZEOF_UNSIGNED_INT EQUAL 4)
     if (GCC_POPCOUNT_EXISTS)
         target_compile_definitions(MeadowsECS PRIVATE USE_GCC_POPCOUNT)
     elseif(MSVC_POPCOUNT_EXISTS)
+        # When this is used, the popcnt instruction must be supported by the CPU
         target_compile_definitions(MeadowsECS PRIVATE USE_MSVC_POPCOUNT)
     endif()
 endif()

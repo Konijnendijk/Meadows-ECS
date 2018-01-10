@@ -29,7 +29,7 @@ namespace Meadows {
     };
 
     template <class T>
-    std::size_t ComponentRegistry::componentIndex<T> = ComponentRegistry::numRegisteredComponents++;
+    std::size_t ComponentRegistry::componentIndex = ComponentRegistry::numRegisteredComponents++;
 }
 
 #endif //MEADOWSECS_COMPONENTREGISTRY_H
