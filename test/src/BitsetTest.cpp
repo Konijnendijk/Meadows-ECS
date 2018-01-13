@@ -7,6 +7,7 @@
 #include <vector>
 #include <csignal>
 #include <functional>
+#include <algorithm>
 
 using namespace Meadows;
 
