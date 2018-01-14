@@ -69,7 +69,7 @@ TEST_CASE("BitSet fuzzing", "[BitSet]") {
     std::uniform_int_distribution<std::size_t> bitIndexRandom(0, 1023);
 
     // Create randomly sized bitsets and set random bits
-    for (int i=0; i<10000; i++) {
+    for (int i=0; i<1000; i++) {
         std::size_t size = bitsetSizeRandom(generator);
         BitSet bitset(size);
 
