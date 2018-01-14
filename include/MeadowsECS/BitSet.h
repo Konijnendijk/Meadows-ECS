@@ -61,6 +61,14 @@ namespace Meadows {
          * @return The number of bits set
          */
         uint32_t popCount(uint32_t num) const;
+
+        /**
+         * Do a popcount on a 32 bit value, using intrinsics if available
+         *
+         * @param num The uint32_t to count the set bits of
+         * @return The number of bits set
+         */
+        uint32_t platformPopCount(uint32_t num) const;
     };
 
 }

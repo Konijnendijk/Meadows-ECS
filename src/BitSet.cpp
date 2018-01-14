@@ -4,6 +4,9 @@
 #include <cstdlib>
 #include <cstring>
 #include <new>
+#include <limits>
+#include <bitset>
+#include <iostream>
 
 #ifdef USE_MSVC_POPCOUNT
 #include <intrin.h>
@@ -44,22 +47,19 @@ void BitSet::set(std::size_t n) {
 std::size_t BitSet::numSetBitsBefore(std::size_t n) {
     std::size_t count = 0;
     // Count the bits in the uint32_t values before the (n/32)th value
-    for (std::size_t i = 0; i<n/32; i++) {
+    size_t numWholeValues = n / 32;
+    for (std::size_t i = 0; i < numWholeValues; i++) {
         uint32_t num = bits[i];
-#ifdef USE_GCC_POPCOUNT
-        count += __builtin_popcount(num);
-#elif USE_MSVC_POPCOUNT
-        // If the popcnt instruction is not supported by the hardware, this will fail
-        count += __popcnt(num);
-#else
-       count += popCount(num);
-#endif
+        count += platformPopCount(num);
     }
 
-    // Count the bits of the (n/32)th value, up to the nth bit
-    for (std::size_t j = 0; j < (n % 32); j++) {
-        if (bits[n / 32] & (1 << j))
-            count++;
+    // For the last value, mask the bits after the nth one
+    size_t remainingBits = n % 32;
+    if (remainingBits > 0) {
+        uint32_t num = bits[numWholeValues];
+        uint32_t lastMask = ~(std::numeric_limits<uint32_t>::max() << remainingBits);
+        num &= lastMask;
+        count += platformPopCount(num);
     }
 
     return count;
@@ -71,6 +71,17 @@ uint32_t BitSet::popCount(uint32_t num) const {
     num = (num & 0x33333333) + ((num >> 2) & 0x33333333);
     num = (((num + (num >> 4)) & 0x0F0F0F0F) * 0x01010101) >> 24;
     return num;
+}
+
+uint32_t BitSet::platformPopCount(uint32_t num) const {
+#ifdef USE_GCC_POPCOUNT
+    return __builtin_popcount(num);
+#elif USE_MSVC_POPCOUNT
+    // If the popcnt instruction is not supported by the hardware, this will fail
+    return __popcnt(num);
+#else
+   return popCount(num);
+#endif
 }
 
 BitSet::~BitSet() {
