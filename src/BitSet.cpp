@@ -16,10 +16,10 @@ BitSet::BitSet() : numBits(0), bits{} {}
 BitSet::BitSet(std::size_t numBits) : numBits(numBits) {
     size_t memoryRequirement = getMemoryRequirement();
     bits = (uint32_t*) std::malloc(memoryRequirement);
-    std::memset(bits, 0, memoryRequirement);
     if (bits == nullptr) {
         throw std::bad_alloc();
     }
+    std::memset(bits, 0, memoryRequirement);
 }
 
 BitSet &BitSet::operator=(const BitSet& other) {
