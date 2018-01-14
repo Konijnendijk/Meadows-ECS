@@ -3,7 +3,7 @@ project(MeadowsECSTest)
 
 include(cmake/ParseAndAddCatchTests.cmake)
 
-set(SOURCE_FILES src/TestMain.cpp src/BitsetTest.cpp src/ComponentRegistryTest.cpp)
+set(SOURCE_FILES src/TestMain.cpp src/BitsetTest.cpp src/ComponentRegistryTest.cpp src/WorldTest.cpp)
 add_executable(MeadowsECSTest ${SOURCE_FILES})
 target_link_libraries(MeadowsECSTest PUBLIC MeadowsECS)
 set_property(TARGET MeadowsECSTest PROPERTY CXX_STANDARD 14)

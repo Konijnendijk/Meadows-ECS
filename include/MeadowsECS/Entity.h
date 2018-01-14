@@ -96,14 +96,14 @@ namespace Meadows {
          *
          * When enabled, Entity#tick() is called on this object
          */
-        virtual void enable();
+        void enable();
 
         /**
          * @brief Disable this object
          *
          * When disabled, Entity#tick() is not called on this object and it will not be parsed by systems
          */
-        virtual void disable();
+        void disable();
 
     private:
 
