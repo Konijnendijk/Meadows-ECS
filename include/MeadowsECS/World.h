@@ -4,6 +4,7 @@
 
 
 #include <vector>
+#include <list>
 #include <type_traits>
 
 #include "Entity.h"
@@ -11,7 +12,7 @@
 
 namespace Meadows {
     class World {
-        std::vector<Entity*> entities;
+        std::list<Entity*> entities;
         std::vector<Entity*> entitiesToAdd;
         std::vector<Entity*> entitiesToRemove;
 

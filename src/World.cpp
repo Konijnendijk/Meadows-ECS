@@ -23,7 +23,8 @@ World::~World() {
 void World::tick(float delta) {
     // Add new objects and initialize them
     for (Entity* add : entitiesToAdd) {
-        entities.push_back(add);
+        entities.push_front(add);
+        add->setLocation(entities.cbegin());
         add->init();
 
         for (auto s : systems) {
@@ -39,7 +40,7 @@ void World::tick(float delta) {
             s->removeEntity(remove);
         }
 
-        entities.erase(std::remove_if(entities.begin(), entities.end(), [remove](Entity* object){return *object == *remove;}));
+        entities.erase(remove->getLocation());
 
         delete(remove);
     }

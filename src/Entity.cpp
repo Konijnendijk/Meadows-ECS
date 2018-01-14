@@ -31,6 +31,14 @@ void Entity::setId(std::size_t id) {
     this->id = id;
 }
 
+void Entity::setLocation(entity_location location) {
+    this->location = location;
+}
+
+Entity::entity_location Entity::getLocation() {
+    return location;
+}
+
 std::size_t Entity::getId() const {
     return id;
 }

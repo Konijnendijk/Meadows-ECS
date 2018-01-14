@@ -2,19 +2,24 @@
 #ifndef MEADOWSGAMEOSG_ENTITY_H
 #define MEADOWSGAMEOSG_ENTITY_H
 
+#include <list>
+
 #include "ComponentSet.h"
 
 namespace Meadows {
 
     class Entity {
 
+        typedef std::list<Entity*>::const_iterator entity_location;
+
         friend class World;
 
         bool enabled;
-
         std::size_t id;
-
         ComponentSet componentSet;
+
+        // The location of this Entity in its World
+        std::list<Entity*>::const_iterator location;
 
     public:
         Entity();
@@ -108,7 +113,7 @@ namespace Meadows {
     private:
 
         /**
-         * @brief Set the id of this object
+         * @brief Set the id of this Entity
          *
          * The id should be set when registering the object with the World. Each object's ID should be unique in that
          * World.
@@ -117,6 +122,21 @@ namespace Meadows {
          */
         void setId(std::size_t id);
 
+        /**
+         * @brief Set the location of this Entity in the world
+         *
+         * Used by the World to store where in its entity list this Entity is stored.
+         *
+         * @param location The location of this entity in its world.
+         */
+        void setLocation(entity_location location);
+
+        /**
+         * @brief Get the location of this entity in the World entity list
+         *
+         * @return An iterator to the location
+         */
+        entity_location getLocation();
     };
 }
 
