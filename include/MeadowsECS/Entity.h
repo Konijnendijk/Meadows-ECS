@@ -29,29 +29,6 @@ namespace Meadows {
         virtual void init() {};
 
         /**
-         * @brief Called at each tick
-         *
-         * Use this method to implement logic that does not involve other Entity instances.
-         *
-         * @param delta The delta time in seconds
-         */
-        virtual void tick(float delta);
-
-        /**
-         * @brief Enable this object
-         *
-         * When enabled, Entity#tick() is called on this object
-         */
-        virtual void enable();
-
-        /**
-         * @brief Disable this object
-         *
-         * When disabled, Entity#tick() is not called on this object and it will not be parsed by systems
-         */
-        virtual void disable();
-
-        /**
          * @brief Add a component to this Entity.
          *
          * Only a single component of each type can be stored in a Entity instance. The component can be retrieved
@@ -103,6 +80,30 @@ namespace Meadows {
         std::size_t getId() const;
 
         bool operator==(const Entity &rhs);
+
+    protected:
+        /**
+        * @brief Called at each tick
+        *
+        * Use this method to implement logic that does not involve other Entity instances.
+        *
+        * @param delta The delta time in seconds
+        */
+        virtual void tick(float delta);
+
+        /**
+         * @brief Enable this object
+         *
+         * When enabled, Entity#tick() is called on this object
+         */
+        virtual void enable();
+
+        /**
+         * @brief Disable this object
+         *
+         * When disabled, Entity#tick() is not called on this object and it will not be parsed by systems
+         */
+        virtual void disable();
 
     private:
 

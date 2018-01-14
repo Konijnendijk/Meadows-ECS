@@ -27,7 +27,7 @@ namespace Meadows {
 
         template <class T>
         std::size_t getComponentIndex() {
-            static_assert(std::is_base_of<Component, T>::value, "T must be of type Component");
+            static_assert(std::is_convertible<T, Component>(), "T must be a subclass of Component");
             return componentIndex<T>;
         }
     };

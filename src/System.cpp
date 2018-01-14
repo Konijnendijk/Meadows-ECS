@@ -34,3 +34,11 @@ void System::removeEntity(Entity *object) {
 bool System::acceptsObject(Entity *object) {
     return true;
 }
+
+void System::init() { }
+
+void System::entityAdded(Entity *object) { }
+
+void System::entityRemoved(Entity *object) { }
+
+void System::doTick(float delta) { }

@@ -16,10 +16,13 @@ namespace Meadows {
      * When objects do not depend on each other, consider using GameObject.tick().
      */
     class System {
-        std::vector<Entity*> entities;
+
         //Objects added or removed in the current frame, will be added to or removed from objects before next frame
         std::vector<Entity*> toAdd;
         std::vector<Entity*> toRemove;
+
+    protected:
+        std::vector<Entity*> entities;
 
     public:
         /**
@@ -35,9 +38,11 @@ namespace Meadows {
         void removeEntity(Entity *object);
 
         /**
-         * @brief Called when the game starts
+         * @brief Called when the system is created
+         *
+         * The default implementation does nothing.
          */
-        virtual void init() = 0;
+        virtual void init();
 
         /**
          * @brief Determines whether a GameObject is accepted by this system
@@ -50,26 +55,33 @@ namespace Meadows {
          */
         virtual bool acceptsObject(Entity *object);
 
+    protected:
+        /**
+         * @brief Called each tick after all objects have been processed
+         *
+         * The default implementation does nothing.
+         *
+         * @param delta Delta time
+         */
+        virtual void doTick(float delta);
+
         /**
          * @brief Called when an object is added to this system
          *
+         * The default implementation does nothing.
+         *
          * @param object The added object
          */
-        virtual void entityAdded(Entity *object) = 0;
+        virtual void entityAdded(Entity *object);
 
         /**
          * @brief Called when an object is removed from the system
          *
+         * The default implementation does nothing.
+         *
          * @param object The removed object
          */
-        virtual void entityRemoved(Entity *object) = 0;
-
-        /**
-         * @brief Called each tick after all objects have been processed
-         *
-         * @param delta Delta time
-         */
-        virtual void doTick(float delta) = 0;
+        virtual void entityRemoved(Entity *object);
     };
 }
 

@@ -4,10 +4,10 @@
 
 
 #include <vector>
+#include <type_traits>
 
 #include "Entity.h"
 #include "System.h"
-
 
 namespace Meadows {
     class World {
@@ -33,6 +33,7 @@ namespace Meadows {
          */
         template<class T, class... VarArgs>
         T* createEntity(VarArgs... varArgs) {
+            static_assert(std::is_convertible<T, Entity>(), "T must be a subclass of Entity");
             T* object = new T(varArgs...);
             registerEntity(object);
             return object;
@@ -48,16 +49,18 @@ namespace Meadows {
          */
          template <class T, class... VarArgs>
         T* createSystem(VarArgs... varArgs) {
+            static_assert(std::is_convertible<T, System>(), "T must be a subclass of System");
             T* system = new T(varArgs...);
             registerSystem(system);
+            system->init();
             return system;
         };
 
         /**
          * @brief Remove a game object from the world.
          *
-         * Removes the given GameObject from the world. Next tick the System.objectRemoved() methods wil be called and
-         * all pointers to this object will be invalidated .
+         * Removes the given Entity from the world. Next tick the System.objectRemoved() methods wil be called and
+         * all pointers to this object will be invalidated.
          *
          * @param object The object to remove
          */
@@ -73,6 +76,7 @@ namespace Meadows {
          */
         template<class T>
         T* getSystem() {
+            static_assert(std::is_convertible<T, System>(), "T must be a subclass of System");
             for (System* s : systems) {
                 T* result = dynamic_cast<T*>(s);
                 if (result != nullptr) {
