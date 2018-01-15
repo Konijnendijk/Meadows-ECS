@@ -25,6 +25,8 @@ namespace Meadows {
         std::vector<Entity*> entities;
 
     public:
+        virtual ~System() = 0;
+
         /**
          * @brief Tick this system
          */

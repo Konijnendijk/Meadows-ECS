@@ -3,6 +3,8 @@
 
 using namespace Meadows;
 
+System::~System() = default;
+
 void System::tick(float delta) {
     for (Entity* add : toAdd) {
         entities.push_back(add);

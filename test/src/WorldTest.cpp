@@ -1,37 +1,11 @@
 
 #include "catch.hpp"
+#include "TestCommons.h"
 
 #include "World.h"
 
 using namespace Meadows;
 
-class TestEntity : public Entity {
-
-public:
-    bool isInitialized;
-    float lastTick;
-    bool* isDestructed;
-
-public:
-    TestEntity(bool* isDestructed) : isInitialized(false), lastTick(-1.0f), isDestructed(isDestructed) {}
-
-    TestEntity () : TestEntity(new bool) {
-
-    }
-
-    ~TestEntity() override {
-        *isDestructed = true;
-    }
-
-    void init() override {
-        isInitialized = true;
-    }
-
-protected:
-    void tick(float delta) override {
-        lastTick = delta;
-    }
-};
 
 TEST_CASE("Creating entities", "[World][integration]") {
 
