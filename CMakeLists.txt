@@ -7,6 +7,7 @@ include(CheckTypeSize)
 project(MeadowsECS)
 
 option(BUILD_TEST "Build the MeadowsECS unit tests" OFF)
+option(CODE_COVERAGE "Build the library with gcov enabled" OFF)
 option(USE_POPCOUNT_INTRINSIC "Use a compiler popcount intrinsic when available" ON)
 
 # Check if a builtin popcount implementation exists and can be used
@@ -28,6 +29,14 @@ set_property(TARGET MeadowsECS PROPERTY CXX_STANDARD 14)
 target_include_directories(MeadowsECS PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/MeadowsECS>
         $<INSTALL_INTERFACE:include/MeadowsECS>)
+
+if (CODE_COVERAGE)
+    if (NOT ${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU")
+        message(SEND_ERROR "Code coverage only supported on gcc")
+    endif()
+    target_compile_options(MeadowsECS PUBLIC "--coverage")
+    target_link_libraries(MeadowsECS "--coverage")
+endif()
 
 # intrinsic popcounts can only be used with `unsigned int`, since internally `uint32_t` is used, these need to match
 if (USE_POPCOUNT_INTRINSIC AND SIZEOF_UNSIGNED_INT EQUAL 4)

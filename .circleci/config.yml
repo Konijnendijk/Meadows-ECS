@@ -3,7 +3,7 @@ version: 2
 jobs:
     build:
         docker:
-            - image: rikorose/gcc-cmake
+            - image: konijnendijk/cpp-build
 
         working_directory: ~/MeadowsECS
 
